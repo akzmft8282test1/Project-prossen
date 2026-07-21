@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Custom Suite Extension",
+  "version": "1.0",
+  "description": "트래픽 분석, 화면 효과 및 웹 서버 연동 크롬 확장 프로그램",
+  "permissions": ["activeTab", "scripting", "storage", "webNavigation"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
