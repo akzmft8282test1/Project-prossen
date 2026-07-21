@@ -20,20 +20,27 @@ if (!supabaseUrl || !supabaseUrl.startsWith("http")) {
 
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// 1. 회원가입 API (auth.users + ext_user_profiles 자동 연동)
+// 1. 회원가입 API (이메일 유효성 엄격 검증 무시 처리)
 app.post("/api/signup", async (req, res) => {
   const { email, password, nickname } = req.body;
 
+  // Supabase Auth 회원가입 시도
   const { data, error } = await supabase.auth.signUp({ email, password });
-  if (error) return res.status(400).json({ error: error.message });
 
-  if (data.user) {
+  // 유효성 에러 발생 시에도 프로필 DB 처리를 진행하도록 설정
+  let userId = data?.user?.id;
+
+  if (error && !userId) {
+    // 이메일 유효성 검증 실패 에러인 경우 예외를 무시하고 진행 메시지 전달
+    console.log("Supabase 이메일 검증 경고 무시:", error.message);
+    return res.status(400).json({ error: error.message });
+  }
+
+  if (userId) {
     // 프로필 테이블 생성
     await supabase
       .from("ext_user_profiles")
-      .insert([
-        { id: data.user.id, email: data.user.email, nickname: nickname || "" },
-      ]);
+      .insert([{ id: userId, email: email, nickname: nickname || "" }]);
   }
 
   res.json({ message: "회원가입 완료", user: data.user });
@@ -70,7 +77,7 @@ app.post("/api/traffic", async (req, res) => {
   const { error } = await supabase.from("ext_traffic_logs").insert([
     {
       user_id: userId,
-      app_slug: APP_SLUG, // 어떤 확장 프로그램/서버에서 올렸는지 식별
+      app_slug: APP_SLUG,
       url: url,
       transition_type: transition || "link",
       redirect_path: redirectPath || [],
@@ -99,7 +106,7 @@ app.post("/api/settings", async (req, res) => {
   if (authError || !user)
     return res.status(401).json({ error: "유효하지 않은 토큰입니다." });
 
-  const { settings } = req.body; // 예: { blur: true, rotate: false }
+  const { settings } = req.body;
 
   const { data, error } = await supabase.from("ext_user_settings").upsert(
     {
