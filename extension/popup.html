@@ -4,56 +4,127 @@
     <meta charset="UTF-8" />
     <style>
       body {
-        width: 280px;
-        font-family: sans-serif;
-        padding: 12px;
+        width: 320px;
+        font-family: "Segoe UI", sans-serif;
+        padding: 14px;
         margin: 0;
+        background: #f8f9fa;
       }
       .card {
-        border: 1px solid #ddd;
+        background: white;
         border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 10px;
+        padding: 14px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        margin-bottom: 12px;
       }
-      input,
-      button {
-        width: 100%;
-        margin-top: 6px;
+      .tab-header {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 12px;
+      }
+      .tab-btn {
+        flex: 1;
         padding: 8px;
+        border: none;
+        background: none;
+        font-weight: bold;
+        color: #888;
+        cursor: pointer;
+      }
+      .tab-btn.active {
+        color: #007bff;
+        border-bottom: 2px solid #007bff;
+      }
+      input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
         box-sizing: border-box;
       }
-      button {
-        background-color: #007bff;
+      button.btn-primary {
+        width: 100%;
+        margin-top: 10px;
+        padding: 9px;
+        background: #007bff;
         color: white;
         border: none;
         border-radius: 4px;
+        font-weight: bold;
         cursor: pointer;
       }
-      button:hover {
-        background-color: #0056b3;
+      button.btn-primary:hover {
+        background: #0056b3;
+      }
+      .btn-effect {
+        width: 100%;
+        padding: 8px;
+        margin-top: 6px;
+        border: 1px solid #28a745;
+        background: white;
+        color: #28a745;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .btn-effect:hover {
+        background: #28a745;
+        color: white;
       }
       .hidden {
         display: none;
       }
+      .info-box {
+        font-size: 12px;
+        background: #e9ecef;
+        padding: 8px;
+        border-radius: 4px;
+        color: #495057;
+        word-break: break-all;
+      }
     </style>
   </head>
   <body>
-    <!-- 로그인 폼 -->
+    <!-- 인증 (로그인 / 회원가입) 섹션 -->
     <div id="auth-section" class="card">
-      <h3>로그인</h3>
-      <input type="email" id="email" placeholder="이메일" />
-      <input type="password" id="password" placeholder="비밀번호" />
-      <button id="btn-login">로그인</button>
+      <div class="tab-header">
+        <button id="tab-login-btn" class="tab-btn active">로그인</button>
+        <button id="tab-signup-btn" class="tab-btn">회원가입</button>
+      </div>
+
+      <!-- 로그인 폼 -->
+      <div id="form-login">
+        <input type="email" id="login-email" placeholder="이메일" />
+        <input type="password" id="login-password" placeholder="비밀번호" />
+        <button id="btn-login" class="btn-primary">로그인</button>
+      </div>
+
+      <!-- 회원가입 폼 -->
+      <div id="form-signup" class="hidden">
+        <input type="text" id="signup-nickname" placeholder="닉네임" />
+        <input type="email" id="signup-email" placeholder="이메일" />
+        <input type="password" id="signup-password" placeholder="비밀번호" />
+        <button id="btn-signup" class="btn-primary">회원가입</button>
+      </div>
     </div>
 
-    <!-- 대시보드 & 화면 효과 제어 -->
+    <!-- 대시보드 및 리모컨 섹션 -->
     <div id="main-section" class="card hidden">
-      <h3>화면 효과 제어</h3>
-      <button id="btn-blur">스마트 블러 토글</button>
-      <button id="btn-rotate" style="margin-top: 4px">화면 180도 회전</button>
+      <h4>특수 화면 효과</h4>
+      <button id="btn-blur" class="btn-effect">🌫️ 스마트 블러 (ON/OFF)</button>
+      <button id="btn-mosaic" class="btn-effect">
+        🧩 픽셀 모자이크 (ON/OFF)
+      </button>
+      <button id="btn-rotate" class="btn-effect">🔄 화면 180도 회전</button>
+
+      <h4 style="margin-top: 16px">현재 접속 상태</h4>
+      <div class="info-box" id="url-info">현재 URL 로딩 중...</div>
+
       <button
         id="btn-logout"
-        style="background-color: #dc3545; margin-top: 12px">
+        class="btn-primary"
+        style="background: #dc3545; margin-top: 14px">
         로그아웃
       </button>
     </div>

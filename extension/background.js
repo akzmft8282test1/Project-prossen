@@ -17,7 +17,7 @@ chrome.webNavigation.onCompleted.addListener((details) => {
     delete redirectChains[details.tabId]; // 사용 후 초기화
 
     chrome.storage.local.get("token", ({ token }) => {
-      fetch("http://localhost:3000/api/traffic", {
+      fetch("https://project-prossen.onrender.com", {
         // Render 배포 시 Render URL로 교체
         method: "POST",
         headers: {
